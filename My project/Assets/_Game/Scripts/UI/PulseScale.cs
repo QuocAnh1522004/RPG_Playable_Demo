@@ -6,7 +6,7 @@ namespace RpgPlayable
     // Endless grow/shrink, for call-to-action buttons.
     public class PulseScale : MonoBehaviour
     {
-        [SerializeField] float scale = 1.08f;
+        [SerializeField] float scale = 1.12f; // same as the AFK end card
         [SerializeField] float halfPeriod = 0.5f;
 
         Tween tween;

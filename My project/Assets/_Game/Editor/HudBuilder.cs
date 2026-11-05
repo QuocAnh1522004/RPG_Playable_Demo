@@ -14,6 +14,25 @@ namespace RpgPlayable.EditorTools
         static readonly Color Green = new Color(0.45f, 1f, 0.3f, 1f); // tint on btn_yellow, the pack has no green button
         static readonly Color Gold = new Color(0.85f, 0.7f, 0.45f, 1f);
 
+        // HUDs built before PulseScale existed don't have it, add it in place so nobody has to rebuild
+        [InitializeOnLoadMethod]
+        static void AddMissingPulse()
+        {
+            EditorApplication.delayCall += () =>
+            {
+                if (EditorApplication.isPlayingOrWillChangePlaymode) return;
+
+                Canvas canvas = Object.FindFirstObjectByType<Canvas>();
+                if (canvas == null) return;
+                Transform play = canvas.transform.Find("TopBar/TopRight/PlayNow");
+                if (play == null || play.GetComponent<PulseScale>() != null) return;
+
+                play.gameObject.AddComponent<PulseScale>();
+                EditorSceneManager.SaveScene(play.gameObject.scene);
+                Debug.Log("Added PulseScale to the top-right PLAY NOW and saved the scene");
+            };
+        }
+
         [MenuItem("RPG Playable/Build HUD And AFK")]
         static void Build()
         {

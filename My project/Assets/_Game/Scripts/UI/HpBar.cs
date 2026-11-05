@@ -11,6 +11,7 @@ namespace RpgPlayable
         [SerializeField] Image trail; // the lighter bar that catches up after a hit
         [SerializeField] TMP_Text label;
         [SerializeField] float padding = 30f; // canvas units above the head
+        [SerializeField] float topLimit = 300f; // canvas units from the top of the screen, keeps clear of the HUD and PLAY NOW
 
         Transform target;
         Camera cam;
@@ -41,8 +42,10 @@ namespace RpgPlayable
         {
             if (target == null || cam == null) return;
 
-            Vector3 screen = cam.WorldToScreenPoint(target.position + Vector3.up * headHeight);
-            transform.position = screen + Vector3.up * padding * transform.lossyScale.y;
+            float uiScale = transform.lossyScale.y;
+            Vector3 pos = cam.WorldToScreenPoint(target.position + Vector3.up * headHeight);
+            pos.y = Mathf.Min(pos.y + padding * uiScale, Screen.height - topLimit * uiScale);
+            transform.position = pos;
         }
 
         // top of the model above its pivot, so the bar fits any model or scale

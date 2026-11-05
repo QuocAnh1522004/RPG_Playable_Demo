@@ -198,7 +198,7 @@
                 "forceIncluded": false
             }
         ],
-        "disableRuntimeAnalysisForCode": true,
+        "disableRuntimeAnalysisForCode": false,
         "disableRuntimeAnalysisForShaders": true,
         "useShadersCache": true,
         "usePreservativeDynamicBatching": true,

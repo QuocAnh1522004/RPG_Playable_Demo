@@ -19,6 +19,8 @@ namespace RpgPlayable
 
         [SerializeField] SkillLibrary skillLibrary;
         [SerializeField] StoreRedirect storeRedirect;
+        [SerializeField] Dice dice;
+        [SerializeField] HeroMover heroMover;
 
         // TODO: remove once the real systems are hooked up
         [SerializeField] float placeholderStepSeconds = 0.75f;
@@ -30,7 +32,11 @@ namespace RpgPlayable
         readonly List<SkillData> ownedSkills = new List<SkillData>();
         public IList<SkillData> OwnedSkills { get { return ownedSkills; } }
 
-        int currentTile;
+        void Awake()
+        {
+            // before CameraFollow.Start reads the hero position
+            heroMover.PlaceAt(startTileIndex);
+        }
 
         void Start()
         {
@@ -40,22 +46,20 @@ namespace RpgPlayable
         IEnumerator Run()
         {
             SetStep(FlowStep.Starting);
-            currentTile = startTileIndex;
 
             for (int i = 0; i < stages.Length; i++)
             {
                 CurrentStageIndex = i;
                 StageConfig stage = stages[i];
 
-                yield return PickSkill();
-                yield return RollDice(stage.targetTileIndex - currentTile);
-                yield return MoveHero(stage.targetTileIndex);
-                currentTile = stage.targetTileIndex;
-                yield return Battle(stage);
+                yield return PickSkill(); //stage %1
+                yield return RollDice(stage.targetTileIndex - heroMover.CurrentTile); //stage %2
+                yield return MoveHero(stage.targetTileIndex);//stage% 2
+                yield return Battle(stage);//stage %3
             }
 
             // last pick goes straight to the store
-            yield return PickSkill();
+            yield return PickSkill();//stage 10
             SetStep(FlowStep.Ending);
             if (storeRedirect != null)
             {
@@ -90,17 +94,14 @@ namespace RpgPlayable
         IEnumerator RollDice(int result)
         {
             SetStep(FlowStep.DiceRoll);
-            // TODO: dice
-            Debug.Log("[Flow] dice = " + result);
-            yield return new WaitForSeconds(placeholderStepSeconds);
+            // TODO: tutorial hand on the dice
+            yield return dice.WaitForTapAndRoll(result);
         }
 
         IEnumerator MoveHero(int targetTile)
         {
             SetStep(FlowStep.Moving);
-            // TODO: hero mover
-            Debug.Log("[Flow] move " + currentTile + " -> " + targetTile);
-            yield return new WaitForSeconds(placeholderStepSeconds);
+            yield return heroMover.MoveTo(targetTile);
         }
 
         IEnumerator Battle(StageConfig stage)
@@ -118,9 +119,9 @@ namespace RpgPlayable
             int from = startTileIndex;
             for (int i = 0; i < stages.Length; i++)
             {
-                int dice = stages[i].targetTileIndex - from;
-                if (dice < 1 || dice > 6)
-                    Debug.LogWarning("Stage " + (i + 1) + " (" + stages[i].label + ") needs a dice roll of " + dice + ", must be 1-6", this);
+                int roll = stages[i].targetTileIndex - from;
+                if (roll < 1 || roll > 6)
+                    Debug.LogWarning("Stage " + (i + 1) + " (" + stages[i].label + ") needs a dice roll of " + roll + ", must be 1-6", this);
                 if (stages[i].roundsToKill < 1)
                     Debug.LogWarning("Stage " + (i + 1) + ": roundsToKill must be at least 1", this);
                 from = stages[i].targetTileIndex;

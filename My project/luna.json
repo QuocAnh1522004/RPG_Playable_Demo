@@ -81,7 +81,7 @@
             "externalJSLibraries": [],
             "scriptingDefines": [],
             "msbuildVersion": "17.14",
-            "monoVersion": "N/A",
+            "monoVersion": "9.0.20",
             "dotnetVersion": ""
         },
         "assets": {

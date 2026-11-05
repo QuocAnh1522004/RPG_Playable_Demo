@@ -68,8 +68,59 @@ PrefabInstance:
       propertyPath: m_Name
       value: hero
       objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: 302573651d78a1848bb8b5aefebe7dc6, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: d854f5523e34a52429124cd13335ef12, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 302573651d78a1848bb8b5aefebe7dc6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3845540912168574644}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 302573651d78a1848bb8b5aefebe7dc6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3463296019378162465}
   m_SourcePrefab: {fileID: 100100000, guid: 302573651d78a1848bb8b5aefebe7dc6, type: 3}
+--- !u!95 &2038121571980818913 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 302573651d78a1848bb8b5aefebe7dc6, type: 3}
+  m_PrefabInstance: {fileID: 5558085620636222576}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &4747674430131910945 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 302573651d78a1848bb8b5aefebe7dc6, type: 3}
+  m_PrefabInstance: {fileID: 5558085620636222576}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3845540912168574644
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4747674430131910945}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e6dc21c71cc4654a95464d857ac26e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 2038121571980818913}
+  defaultFade: 0.1
+--- !u!114 &3463296019378162465
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4747674430131910945}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 945475d0af070f143bd063f533bcbc69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  board: {fileID: 0}
+  anim: {fileID: 3845540912168574644}
+  hopDuration: 0.3
+  hopHeight: 0.35
+  turnDuration: 0.1

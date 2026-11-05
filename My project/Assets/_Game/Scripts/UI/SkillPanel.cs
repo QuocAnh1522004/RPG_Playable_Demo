@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
@@ -13,9 +14,11 @@ namespace RpgPlayable
         [SerializeField] SkillCard[] cards;
         [SerializeField] TutorialHand hand;
         [SerializeField] float fadeDuration = 0.2f;
+        [SerializeField] float cardStagger = 0.08f;
 
         readonly List<RectTransform> handTargets = new List<RectTransform>();
         SkillCard picked;
+        Action onPicked;
 
         public SkillData Picked { get { return picked != null ? picked.Skill : null; } }
 
@@ -26,9 +29,11 @@ namespace RpgPlayable
             root.SetActive(false);
         }
 
-        public IEnumerator ShowAndWaitForPick(List<SkillData> options)
+        // onPicked runs inside the click itself, for things that need a real user gesture (opening the store)
+        public IEnumerator ShowAndWaitForPick(List<SkillData> options, Action onPicked = null)
         {
             picked = null;
+            this.onPicked = onPicked;
             handTargets.Clear();
 
             for (int i = 0; i < cards.Length; i++)
@@ -47,7 +52,11 @@ namespace RpgPlayable
             group.alpha = 0f;
             content.localScale = Vector3.one * 0.9f;
             Fade(1f);
-            yield return TweenWait.For(content.DOScale(1f, 0.3f).SetEase(Ease.OutBack));
+            content.DOScale(1f, 0.3f).SetEase(Ease.OutBack);
+
+            for (int i = 0; i < handTargets.Count; i++)
+                cards[i].PlayIntro(0.1f + i * cardStagger);
+            yield return new WaitForSeconds(0.45f + handTargets.Count * cardStagger);
 
             hand.PointAtEach(handTargets, HighlightIndex);
 
@@ -59,6 +68,7 @@ namespace RpgPlayable
             {
                 card.SetInteractable(false);
                 card.SetHighlight(card == picked);
+                if (card != picked) card.SetDimmed(true);
             }
 
             yield return TweenWait.For(picked.Rect.DOPunchScale(Vector3.one * 0.06f, 0.25f, 6, 0.5f));
@@ -68,7 +78,9 @@ namespace RpgPlayable
 
         void OnCardClicked(SkillCard card)
         {
-            if (picked == null) picked = card;
+            if (picked != null) return;
+            picked = card;
+            if (onPicked != null) onPicked();
         }
 
         void HighlightIndex(int index)

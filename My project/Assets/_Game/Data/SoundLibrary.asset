@@ -19,6 +19,7 @@ MonoBehaviour:
   panelOpen: {fileID: 8300000, guid: 45bc9d2b90fe10443b84b3c4aba12601, type: 3}
   panelClose: {fileID: 8300000, guid: 7436965268eafff40a3097b0c0d64889, type: 3}
   pickup: {fileID: 8300000, guid: 7436965268eafff40a3097b0c0d64889, type: 3}
+  upgrade: {fileID: 8300000, guid: 29bb5247ed7ebde4c95145ccd2d176ce, type: 3}
   footsteps:
   - {fileID: 8300000, guid: 0479ea84f8e259547aa3d4506ed65d56, type: 3}
   - {fileID: 8300000, guid: 1fe70be10cc7dbb4e85fd40f8dfea3eb, type: 3}

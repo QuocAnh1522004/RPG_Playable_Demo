@@ -25,6 +25,7 @@ namespace RpgPlayable
         [SerializeField] TutorialHand tutorialHand;
         [SerializeField] BattleController battle;
         [SerializeField] HeroStats heroStats;
+        [SerializeField] GameObject upgradeFx; // hero_spawn_fx, plays on the board hero after each pick
 
         public FlowStep CurrentStep { get; private set; }
         public int CurrentStageIndex { get; private set; }
@@ -59,14 +60,15 @@ namespace RpgPlayable
                 yield return Battle(stage);//stage %3
             }
 
-            // last pick goes straight to the store
-            yield return PickSkill();//stage 10
+            // last pick goes straight to the store, opened inside the tap so it counts as a user gesture
+            yield return PickSkill(OpenStoreOnPick);//stage 10
             SetStep(FlowStep.Ending);
-            if (storeRedirect != null)
-            {
-                storeRedirect.MarkGameEnded();
-                storeRedirect.OpenStore();
-            }
+        }
+
+        void OpenStoreOnPick()
+        {
+            storeRedirect.MarkGameEnded();
+            storeRedirect.OpenStore();
         }
 
         void SetStep(FlowStep step)
@@ -76,12 +78,12 @@ namespace RpgPlayable
             if (StepChanged != null) StepChanged(step);
         }
 
-        IEnumerator PickSkill()
+        IEnumerator PickSkill(Action onPicked = null)
         {
             SetStep(FlowStep.SkillPick);
 
             List<SkillData> options = skillLibrary.PickRandom(3, ownedSkills);
-            yield return skillPanel.ShowAndWaitForPick(options);
+            yield return skillPanel.ShowAndWaitForPick(options, onPicked);
 
             if (skillPanel.Picked != null)
             {
@@ -89,6 +91,10 @@ namespace RpgPlayable
                 heroStats.Recalculate(ownedSkills);
                 Debug.Log("[Flow] picked " + skillPanel.Picked.displayName);
             }
+
+            // power-up burst on the hero, the next step (hand on the dice) starts while it plays
+            FxSpawner.Spawn(upgradeFx, heroMover.transform.position, Quaternion.identity, 3f, 1f);
+            AudioManager.Play(AudioManager.Sounds.upgrade, 0.7f);
         }
 
         IEnumerator RollDice(int result)

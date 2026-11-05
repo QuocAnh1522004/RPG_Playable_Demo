@@ -28,6 +28,7 @@ namespace RpgPlayable.EditorTools
             lib.panelOpen = Clip("UI/Common Pop-up/sfx_ui_common_pop-up_open.wav");
             lib.panelClose = Clip("UI/Common Pop-up/sfx_ui_common_pop-up_close.mp3");
             lib.pickup = Clip("UI/Common Pop-up/sfx_ui_common_pop-up_close.mp3"); // no coin sound in the pack
+            lib.upgrade = Clip("Combat/sfx_main_fx_hero_spawn.mp3");
             lib.footsteps = Clips("Combat/sfx_main_footsteps1.mp3", "Combat/sfx_main_footsteps2.mp3",
                                   "Combat/sfx_main_footsteps3.mp3", "Combat/sfx_main_footsteps4.mp3");
 

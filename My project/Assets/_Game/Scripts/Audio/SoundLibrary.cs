@@ -26,6 +26,7 @@ namespace RpgPlayable
         public AudioClip panelOpen;
         public AudioClip panelClose;
         public AudioClip pickup;
+        public AudioClip upgrade;
         public AudioClip[] footsteps;
 
         [Header("Hero")]

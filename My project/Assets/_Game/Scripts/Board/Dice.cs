@@ -1,6 +1,7 @@
 using System.Collections;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace RpgPlayable
 {
@@ -10,6 +11,7 @@ namespace RpgPlayable
     {
         [SerializeField] Transform visual;
         [SerializeField] Vector3[] faceRotations = new Vector3[6]; // local euler with face 1..6 on top
+        [SerializeField] int restingFace = 3; // what it shows before the first roll
 
         [SerializeField] float tapRadius = 0.1f; // fraction of screen height
         [SerializeField] float jumpHeight = 3f;
@@ -29,15 +31,25 @@ namespace RpgPlayable
         {
             cam = Camera.main;
             restPosition = visual.localPosition;
+            visual.localEulerAngles = faceRotations[Mathf.Clamp(restingFace, 1, 6) - 1];
         }
 
         void Update()
         {
             if (!waitingForTap || !Input.GetMouseButtonDown(0)) return;
+            if (TapIsOnUi()) return; // e.g. the AFK overlay is up
 
             float dist = Vector2.Distance(ScreenPosition, Input.mousePosition);
             if (dist <= tapRadius * Screen.height)
                 tapped = true;
+        }
+
+        static bool TapIsOnUi()
+        {
+            EventSystem es = EventSystem.current;
+            if (es == null) return false;
+            if (es.IsPointerOverGameObject()) return true;
+            return Input.touchCount > 0 && es.IsPointerOverGameObject(Input.GetTouch(0).fingerId);
         }
 
         public IEnumerator WaitForTapAndRoll(int result, System.Action onTapped)

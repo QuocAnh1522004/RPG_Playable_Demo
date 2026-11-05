@@ -1,4 +1,5 @@
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
 namespace RpgPlayable.EditorTools
@@ -6,6 +7,8 @@ namespace RpgPlayable.EditorTools
     [CustomEditor(typeof(Dice))]
     public class DiceEditor : Editor
     {
+        const string DoneKey = "RpgPlayable.DiceFacesAutoSetup.v2";
+
         public override void OnInspectorGUI()
         {
             DrawDefaultInspector();
@@ -13,14 +16,13 @@ namespace RpgPlayable.EditorTools
             var dice = (Dice)target;
             if (dice.Visual == null) return;
 
-            serializedObject.Update();
-            SerializedProperty faces = serializedObject.FindProperty("faceRotations");
-
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("Face setup", EditorStyles.boldLabel);
             if (GUILayout.Button("Auto Setup Faces", GUILayout.Height(26)))
-                AutoSetup(dice, faces);
+                AutoSetup(dice);
 
+            serializedObject.Update();
+            SerializedProperty faces = serializedObject.FindProperty("faceRotations");
             for (int i = 0; i < faces.arraySize; i++)
             {
                 SerializedProperty face = faces.GetArrayElementAtIndex(i);
@@ -36,19 +38,52 @@ namespace RpgPlayable.EditorTools
                     face.vector3Value = dice.Visual.localEulerAngles;
                 EditorGUILayout.EndHorizontal();
             }
-
             serializedObject.ApplyModifiedProperties();
+        }
+
+        // runs once after this script compiles, so nobody has to press the button
+        [InitializeOnLoadMethod]
+        static void AutoSetupOnce()
+        {
+            if (EditorPrefs.GetBool(DoneKey, false)) return;
+
+            EditorApplication.delayCall += () =>
+            {
+                if (EditorApplication.isPlayingOrWillChangePlaymode) return;
+
+                Dice dice = Object.FindFirstObjectByType<Dice>();
+                if (dice == null || dice.Visual == null) return; // scene not open yet, try again next reload
+
+                if (AutoSetup(dice))
+                {
+                    EditorSceneManager.SaveScene(dice.gameObject.scene);
+                    EditorPrefs.SetBool(DoneKey, true);
+                    Debug.Log("Dice faces set up automatically and scene saved");
+                }
+            };
+        }
+
+        [MenuItem("RPG Playable/Auto Setup Dice Faces")]
+        static void AutoSetupMenu()
+        {
+            Dice dice = Object.FindFirstObjectByType<Dice>();
+            if (dice == null || dice.Visual == null)
+            {
+                Debug.LogError("No Dice with a Visual in the scene");
+                return;
+            }
+            if (AutoSetup(dice)) EditorSceneManager.MarkSceneDirty(dice.gameObject.scene);
         }
 
         // Finds which side of the mesh carries which number (from the UVs on dice_color.png),
         // then builds a rotation per number that puts that side facing world up with the cube axis-aligned.
-        static void AutoSetup(Dice dice, SerializedProperty faces)
+        static bool AutoSetup(Dice dice)
         {
             MeshFilter mf = dice.Visual.GetComponentInChildren<MeshFilter>();
             if (mf == null || mf.sharedMesh == null)
             {
                 Debug.LogError("Dice: no mesh found under Visual");
-                return;
+                return false;
             }
 
             Mesh mesh = mf.sharedMesh;
@@ -95,7 +130,7 @@ namespace RpgPlayable.EditorTools
                 if (!found[n])
                 {
                     Debug.LogError("Dice: couldn't find face " + n + ", set it by hand with Save");
-                    return;
+                    return false;
                 }
             }
 
@@ -103,6 +138,9 @@ namespace RpgPlayable.EditorTools
             Quaternion meshToVisual = Quaternion.Inverse(visual.rotation) * mf.transform.rotation;
             Quaternion anchorInv = Quaternion.Inverse(visual.parent != null ? visual.parent.rotation : Quaternion.identity);
 
+            var so = new SerializedObject(dice);
+            SerializedProperty faces = so.FindProperty("faceRotations");
+            faces.arraySize = 6;
             for (int n = 1; n <= 6; n++)
             {
                 Vector3 up = meshToVisual * axisOf[n];
@@ -110,11 +148,13 @@ namespace RpgPlayable.EditorTools
                 Quaternion world = Quaternion.Inverse(Quaternion.LookRotation(forward, up));
                 faces.GetArrayElementAtIndex(n - 1).vector3Value = (anchorInv * world).eulerAngles;
             }
+            so.ApplyModifiedProperties();
 
-            faces.serializedObject.ApplyModifiedProperties();
-            Undo.RecordObject(visual, "Show Dice Face");
-            visual.localEulerAngles = faces.GetArrayElementAtIndex(0).vector3Value;
-            Debug.Log("Dice faces set up, showing 1");
+            int resting = Mathf.Clamp(so.FindProperty("restingFace").intValue, 1, 6);
+            Undo.RecordObject(visual, "Dice Resting Face");
+            visual.localEulerAngles = faces.GetArrayElementAtIndex(resting - 1).vector3Value;
+            EditorUtility.SetDirty(dice);
+            return true;
         }
 
         static int Perpendicular(Vector3[] axisOf, int n)

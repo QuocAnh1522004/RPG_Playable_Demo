@@ -2,7 +2,7 @@
     "version": "7.2.0",
     "projectId": "1ad11d810c41ffa45a7cd2fe480aed16",
     "applicationID": 44121,
-    "creativeName": "",
+    "creativeName": "Test_Demo",
     "pgServer": "EU",
     "window": {
         "‐⁘": true
@@ -125,7 +125,9 @@
                 "Stubs/MoreMountains.NiceVibrations"
             ],
             "includes": [
-                "Assets/Resources/DOTweenSettings.asset"
+                "Assets/Resources/DOTweenSettings.asset",
+                "Assets/TextMesh Pro/Resources/TMP Settings.asset",
+                "Assets/TextMesh Pro/Resources/Style Sheets/Default Style Sheet.asset"
             ]
         },
         "scenes": [
@@ -197,7 +199,7 @@
             }
         ],
         "disableRuntimeAnalysisForCode": true,
-        "disableRuntimeAnalysisForShaders": false,
+        "disableRuntimeAnalysisForShaders": true,
         "useShadersCache": true,
         "usePreservativeDynamicBatching": true,
         "preventUpdatingRAListWhenRAIsDisabled": false,

@@ -123,7 +123,6 @@ namespace RpgPlayable
         void Exit()
         {
             Destroy(monsterTf.gameObject);
-            if (stage.monster != null) stage.monster.SetActive(false);
 
             ui.SetActive(false);
             battleCamera.enabled = false;

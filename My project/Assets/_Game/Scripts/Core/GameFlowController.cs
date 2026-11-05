@@ -108,6 +108,7 @@ namespace RpgPlayable
         {
             SetStep(FlowStep.Battle);
             yield return battle.Run(stage, ownedSkills);
+            heroMover.ClearCurrentTile(); // the beaten monster shrinks away on the board
         }
 
         void OnValidate()

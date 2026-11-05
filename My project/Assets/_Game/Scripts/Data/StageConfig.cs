@@ -10,7 +10,6 @@ namespace RpgPlayable
         public string monsterName = "SLIME";
         public int targetTileIndex; // dice result = this - hero's current tile
 
-        public GameObject monster; // the one on the board, hidden once it's beaten
         public GameObject battlePrefab;
         public float battleScale = 1f;
 

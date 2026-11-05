@@ -25,6 +25,11 @@ namespace RpgPlayable
             transform.position = board.GetTilePosition(tile);
         }
 
+        public void ClearCurrentTile()
+        {
+            TileObject.ClearAt(board, CurrentTile);
+        }
+
         public IEnumerator MoveTo(int targetTile)
         {
             if (anim != null) anim.Play(ActorAnimator.Run);

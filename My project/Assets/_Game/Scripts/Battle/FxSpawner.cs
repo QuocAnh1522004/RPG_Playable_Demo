@@ -10,6 +10,8 @@ namespace RpgPlayable
             if (prefab == null) return null;
 
             GameObject go = Object.Instantiate(prefab, position, rotation);
+            // the *_reusable prefabs are saved disabled (they came from a pool in the original game)
+            if (!go.activeSelf) go.SetActive(true);
             if (scale != 1f) go.transform.localScale *= scale;
 
             foreach (ParticleSystem ps in go.GetComponentsInChildren<ParticleSystem>(true))

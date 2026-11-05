@@ -23,9 +23,8 @@ namespace RpgPlayable
         [SerializeField] HeroMover heroMover;
         [SerializeField] SkillPanel skillPanel;
         [SerializeField] TutorialHand tutorialHand;
-
-        // TODO: remove once the real systems are hooked up
-        [SerializeField] float placeholderStepSeconds = 0.75f;
+        [SerializeField] BattleController battle;
+        [SerializeField] HeroStats heroStats;
 
         public FlowStep CurrentStep { get; private set; }
         public int CurrentStageIndex { get; private set; }
@@ -87,6 +86,7 @@ namespace RpgPlayable
             if (skillPanel.Picked != null)
             {
                 ownedSkills.Add(skillPanel.Picked);
+                heroStats.Recalculate(ownedSkills);
                 Debug.Log("[Flow] picked " + skillPanel.Picked.displayName);
             }
         }
@@ -107,9 +107,7 @@ namespace RpgPlayable
         IEnumerator Battle(StageConfig stage)
         {
             SetStep(FlowStep.Battle);
-            // TODO: battle controller
-            Debug.Log("[Flow] battle vs " + stage.label + ", dies in round " + stage.roundsToKill);
-            yield return new WaitForSeconds(placeholderStepSeconds * 2f);
+            yield return battle.Run(stage, ownedSkills);
         }
 
         void OnValidate()

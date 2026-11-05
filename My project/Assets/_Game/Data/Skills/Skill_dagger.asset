@@ -22,6 +22,7 @@ MonoBehaviour:
   trigger: 2
   roundInterval: 2
   projectileCount: 1
+  fromAbove: 0
   priority: 1
   effect: 0
   effectChance: 0

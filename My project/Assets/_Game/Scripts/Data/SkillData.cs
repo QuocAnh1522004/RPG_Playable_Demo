@@ -26,6 +26,7 @@ namespace RpgPlayable
         public SkillTrigger trigger;
         public int roundInterval = 1;
         public int projectileCount = 1;
+        public bool fromAbove; // projectiles drop onto the target instead of flying from the hero
         public int priority = 100; // lower fires first
 
         [Header("On-hit effect")]

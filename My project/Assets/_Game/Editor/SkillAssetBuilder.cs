@@ -41,6 +41,7 @@ namespace RpgPlayable.EditorTools
                     s.kind = SkillKind.Active;
                     s.trigger = SkillTrigger.BattleStartOnly;
                     s.projectileCount = 3;
+                    s.fromAbove = true;
                     s.priority = 0;
                     s.effect = StatusEffect.Burn;
                     s.effectChance = 0.4f;
@@ -163,6 +164,7 @@ namespace RpgPlayable.EditorTools
             s.trigger = SkillTrigger.None;
             s.roundInterval = 1;
             s.projectileCount = 1;
+            s.fromAbove = false;
             s.priority = 100;
             s.effect = StatusEffect.None;
             s.effectChance = 0f;

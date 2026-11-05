@@ -144,7 +144,9 @@ namespace RpgPlayable.EditorTools
             logo.rectTransform.sizeDelta = new Vector2(300f, 140f);
             logo.rectTransform.anchoredPosition = new Vector2(-10f, 40f);
 
-            return NewPlayButton("PlayNow", corner, new Vector2(290f, 80f), new Vector2(-10f, -55f), 42f, font, thick);
+            Button play = NewPlayButton("PlayNow", corner, new Vector2(290f, 80f), new Vector2(-10f, -55f), 42f, font, thick);
+            play.gameObject.AddComponent<PulseScale>();
+            return play;
         }
 
         static AfkOverlay BuildAfk(Transform canvas, StoreRedirect store, TMP_FontAsset font, Material thick)

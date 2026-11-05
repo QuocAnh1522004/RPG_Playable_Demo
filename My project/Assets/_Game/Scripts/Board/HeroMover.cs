@@ -40,6 +40,14 @@ namespace RpgPlayable
                     transform.DORotateQuaternion(Quaternion.LookRotation(dir), turnDuration);
 
                 Tween hop = transform.DOJump(to, hopHeight, 1, hopDuration).SetEase(Ease.Linear);
+
+                // tiles we only pass through get cleared halfway into the hop, the stop tile keeps its monster
+                if (next != targetTile)
+                {
+                    yield return new WaitForSeconds(hopDuration * 0.5f);
+                    TileObject.ClearAt(board, next);
+                }
+
                 yield return TweenWait.For(hop);
                 CurrentTile = next;
             }

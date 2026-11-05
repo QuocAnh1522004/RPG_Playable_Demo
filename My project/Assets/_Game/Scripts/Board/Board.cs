@@ -18,6 +18,24 @@ namespace RpgPlayable
             return tiles[Mathf.Clamp(index, 0, tiles.Count - 1)].position;
         }
 
+        public int NearestTile(Vector3 position)
+        {
+            int best = -1;
+            float bestDist = float.MaxValue;
+            for (int i = 0; i < tiles.Count; i++)
+            {
+                if (tiles[i] == null) continue;
+                Vector3 d = tiles[i].position - position;
+                d.y = 0f;
+                if (d.sqrMagnitude < bestDist)
+                {
+                    bestDist = d.sqrMagnitude;
+                    best = i;
+                }
+            }
+            return best;
+        }
+
 #if UNITY_EDITOR
         void OnDrawGizmos()
         {

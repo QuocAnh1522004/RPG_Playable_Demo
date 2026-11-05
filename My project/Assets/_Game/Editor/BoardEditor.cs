@@ -1,4 +1,5 @@
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
 namespace RpgPlayable.EditorTools
@@ -154,6 +155,44 @@ namespace RpgPlayable.EditorTools
                     t.position = nearest.position;
                 }
             }
+        }
+
+        // Adds TileObject to every monster / chest standing next to the Board (scene objects only,
+        // the prefabs stay clean so the battle copies don't get one).
+        [MenuItem("RPG Playable/Setup Tile Objects")]
+        static void SetupTileObjects()
+        {
+            var board = FindFirstObjectByType<Board>();
+            if (board == null || board.transform.parent == null)
+            {
+                Debug.LogWarning("No Board in the scene");
+                return;
+            }
+
+            int monsters = 0, pickups = 0;
+            foreach (Transform child in board.transform.parent)
+            {
+                GameObject source = PrefabUtility.GetCorrespondingObjectFromSource(child.gameObject);
+                string name = source != null ? source.name : child.name;
+
+                TileObject.Kind kind;
+                if (name.StartsWith("Slime") || name.StartsWith("Troll") || name.StartsWith("Treant")) kind = TileObject.Kind.Monster;
+                else if (name.StartsWith("chest")) kind = TileObject.Kind.Pickup;
+                else continue;
+
+                var obj = child.GetComponent<TileObject>();
+                if (obj == null) obj = Undo.AddComponent<TileObject>(child.gameObject);
+
+                var so = new SerializedObject(obj);
+                so.FindProperty("kind").enumValueIndex = (int)kind;
+                so.ApplyModifiedProperties();
+
+                if (kind == TileObject.Kind.Monster) monsters++;
+                else pickups++;
+            }
+
+            EditorSceneManager.MarkSceneDirty(board.gameObject.scene);
+            Debug.Log("Tile objects: " + monsters + " monsters, " + pickups + " pickups");
         }
     }
 }

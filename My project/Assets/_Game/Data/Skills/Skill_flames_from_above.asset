@@ -18,6 +18,7 @@ MonoBehaviour:
     inflict Burn.
   icon: {fileID: 21300000, guid: 8e6632b588a14254fa5b42c629fbb22d, type: 3}
   selectable: 1
+  legendary: 0
   kind: 0
   trigger: 1
   roundInterval: 1

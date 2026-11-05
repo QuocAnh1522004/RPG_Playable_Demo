@@ -17,6 +17,7 @@ MonoBehaviour:
   description: "Combo \u2191"
   icon: {fileID: 21300000, guid: 652daa9d40dbb2a45952c627740214e1, type: 3}
   selectable: 1
+  legendary: 0
   kind: 2
   trigger: 0
   roundInterval: 1

@@ -19,6 +19,7 @@ namespace RpgPlayable
         [TextArea(2, 4)] public string description;
         public Sprite icon;
         public bool selectable = true; // false for Basic Attack
+        public bool legendary;
 
         [Header("Behaviour")]
         public SkillKind kind;

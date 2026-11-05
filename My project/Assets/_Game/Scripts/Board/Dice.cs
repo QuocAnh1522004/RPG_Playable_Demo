@@ -40,13 +40,14 @@ namespace RpgPlayable
                 tapped = true;
         }
 
-        public IEnumerator WaitForTapAndRoll(int result)
+        public IEnumerator WaitForTapAndRoll(int result, System.Action onTapped)
         {
             tapped = false;
             waitingForTap = true;
             while (!tapped) yield return null;
             waitingForTap = false;
 
+            if (onTapped != null) onTapped();
             yield return Roll(result);
         }
 

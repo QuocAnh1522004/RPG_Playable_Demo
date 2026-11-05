@@ -21,6 +21,8 @@ namespace RpgPlayable
         [SerializeField] StoreRedirect storeRedirect;
         [SerializeField] Dice dice;
         [SerializeField] HeroMover heroMover;
+        [SerializeField] SkillPanel skillPanel;
+        [SerializeField] TutorialHand tutorialHand;
 
         // TODO: remove once the real systems are hooked up
         [SerializeField] float placeholderStepSeconds = 0.75f;
@@ -78,24 +80,22 @@ namespace RpgPlayable
         IEnumerator PickSkill()
         {
             SetStep(FlowStep.SkillPick);
-            // TODO: skill panel + tutorial hand
-            if (skillLibrary != null)
+
+            List<SkillData> options = skillLibrary.PickRandom(3, ownedSkills);
+            yield return skillPanel.ShowAndWaitForPick(options);
+
+            if (skillPanel.Picked != null)
             {
-                List<SkillData> options = skillLibrary.PickRandom(3, ownedSkills);
-                if (options.Count > 0)
-                {
-                    ownedSkills.Add(options[0]);
-                    Debug.Log("[Flow] picked " + options[0].displayName);
-                }
+                ownedSkills.Add(skillPanel.Picked);
+                Debug.Log("[Flow] picked " + skillPanel.Picked.displayName);
             }
-            yield return new WaitForSeconds(placeholderStepSeconds);
         }
 
         IEnumerator RollDice(int result)
         {
             SetStep(FlowStep.DiceRoll);
-            // TODO: tutorial hand on the dice
-            yield return dice.WaitForTapAndRoll(result);
+            tutorialHand.PointAt(dice.ScreenPosition);
+            yield return dice.WaitForTapAndRoll(result, tutorialHand.Hide);
         }
 
         IEnumerator MoveHero(int targetTile)

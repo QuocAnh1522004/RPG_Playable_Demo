@@ -17,6 +17,7 @@ MonoBehaviour:
   description: Trigger 1 Fire ball every round, each with a chance to inflict Burn.
   icon: {fileID: 21300000, guid: 35178badfa3821647bf00de41c9785af, type: 3}
   selectable: 1
+  legendary: 0
   kind: 0
   trigger: 3
   roundInterval: 1

@@ -17,6 +17,7 @@ MonoBehaviour:
   description: "Max HP \u2191"
   icon: {fileID: 21300000, guid: d827220214bb588499eb03c4e1e3cda7, type: 3}
   selectable: 1
+  legendary: 0
   kind: 2
   trigger: 0
   roundInterval: 1

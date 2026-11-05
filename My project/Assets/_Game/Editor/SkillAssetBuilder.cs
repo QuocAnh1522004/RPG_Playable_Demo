@@ -103,7 +103,9 @@ namespace RpgPlayable.EditorTools
 
             all.Add(Passive("hp", "HP", "Max HP ↑", "skill_c41", StatType.MaxHp, 20));
             all.Add(Passive("combo", "Combo", "Combo ↑", "skill_c1", StatType.Combo, 15));
-            all.Add(Passive("huge_hp", "Huge HP", "Max HP ↑↑", "skill_l22", StatType.MaxHp, 50));
+            SkillData hugeHp = Passive("huge_hp", "Huge HP", "Max HP ↑↑", "skill_l22", StatType.MaxHp, 50);
+            hugeHp.legendary = true;
+            all.Add(hugeHp);
             all.Add(Passive("def", "DEF", "DEF ↑", "skill_c43", StatType.Def, 15));
             all.Add(Passive("atk", "ATK", "ATK ↑", "skill_c42", StatType.Atk, 15));
             all.Add(Passive("enhanced_basic_attack", "Enhanced Basic Attack", "Basic ATK DMG ↑↑", "skill_c3", StatType.BasicAttackDamage, 40));
@@ -156,6 +158,7 @@ namespace RpgPlayable.EditorTools
 
             // reset so old values don't stick around when re-running
             s.selectable = true;
+            s.legendary = false;
             s.kind = SkillKind.Passive;
             s.trigger = SkillTrigger.None;
             s.roundInterval = 1;

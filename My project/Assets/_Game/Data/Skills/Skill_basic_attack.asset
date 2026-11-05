@@ -17,6 +17,7 @@ MonoBehaviour:
   description: Attack with equipped weapon every round.
   icon: {fileID: 0}
   selectable: 0
+  legendary: 0
   kind: 0
   trigger: 3
   roundInterval: 1

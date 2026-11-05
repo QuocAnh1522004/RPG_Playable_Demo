@@ -17,6 +17,7 @@ MonoBehaviour:
   description: Basic ATK has a chance to inflict Poison.
   icon: {fileID: 21300000, guid: a4ec408a215d8344d994be5779a89c55, type: 3}
   selectable: 1
+  legendary: 0
   kind: 1
   trigger: 0
   roundInterval: 1

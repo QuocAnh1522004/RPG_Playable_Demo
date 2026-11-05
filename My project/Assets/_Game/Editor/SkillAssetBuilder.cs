@@ -23,6 +23,11 @@ namespace RpgPlayable.EditorTools
         const string FxSlash = "hero 1_sword_fx_atk_slash";
         const string FxSlashHit = "hero 1_fx_atk_hit";
 
+        const string SfxDir = "Assets/PLA_TEST/Art/AudioClip/Combat/";
+        const string SfxDaggerHit = "sfx_main_fx_dagger_hit1.wav";
+        const string SfxFireballHit = "sfx_main_fx_fire_ball_hit1.wav";
+        const string SfxLightning = "sfx_main_fx_lightning1.wav";
+
         [MenuItem("RPG Playable/Build Skill Assets")]
         public static void BuildAll()
         {
@@ -47,6 +52,7 @@ namespace RpgPlayable.EditorTools
                     s.effectChance = 0.4f;
                     s.castFx = Fx(FxFireball);
                     s.hitFx = Fx(FxFireballHit);
+                    s.hitSound = Sfx(SfxFireballHit);
                     s.effectFx = Fx(FxBurn);
                 }));
 
@@ -60,6 +66,7 @@ namespace RpgPlayable.EditorTools
                     s.priority = 1;
                     s.castFx = Fx(FxDagger);
                     s.hitFx = Fx(FxDaggerHit);
+                    s.hitSound = Sfx(SfxDaggerHit);
                 }));
 
             all.Add(Make("lightning_dagger", "Lightning Dagger",
@@ -74,7 +81,9 @@ namespace RpgPlayable.EditorTools
                     s.effectChance = 0.5f;
                     s.castFx = Fx(FxDagger);
                     s.hitFx = Fx(FxDaggerHit);
+                    s.hitSound = Sfx(SfxDaggerHit);
                     s.effectFx = Fx(FxLightning);
+                    s.effectSound = Sfx(SfxLightning);
                 }));
 
             all.Add(Make("round_fire_strike", "Round Fire Strike",
@@ -88,6 +97,7 @@ namespace RpgPlayable.EditorTools
                     s.effectChance = 0.3f;
                     s.castFx = Fx(FxFireball);
                     s.hitFx = Fx(FxFireballHit);
+                    s.hitSound = Sfx(SfxFireballHit);
                     s.effectFx = Fx(FxBurn);
                 }));
 
@@ -173,6 +183,8 @@ namespace RpgPlayable.EditorTools
             s.castFx = null;
             s.hitFx = null;
             s.effectFx = null;
+            s.hitSound = null;
+            s.effectSound = null;
 
             s.id = id;
             s.displayName = name;
@@ -189,6 +201,13 @@ namespace RpgPlayable.EditorTools
             var sprite = AssetDatabase.LoadAssetAtPath<Sprite>(IconDir + name + ".png");
             if (sprite == null) Debug.LogWarning("Icon not found: " + name);
             return sprite;
+        }
+
+        static AudioClip Sfx(string file)
+        {
+            var clip = AssetDatabase.LoadAssetAtPath<AudioClip>(SfxDir + file);
+            if (clip == null) Debug.LogWarning("Sound not found: " + file);
+            return clip;
         }
 
         static GameObject Fx(string name)

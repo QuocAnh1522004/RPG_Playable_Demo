@@ -42,6 +42,10 @@ namespace RpgPlayable
         public GameObject hitFx;
         public GameObject effectFx;
 
+        [Header("Sound")]
+        public AudioClip hitSound;
+        public AudioClip effectSound;
+
         public bool TriggersOnRound(int round)
         {
             if (kind != SkillKind.Active) return false;

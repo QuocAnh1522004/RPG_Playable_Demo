@@ -43,6 +43,7 @@ namespace RpgPlayable
             }
 
             root.SetActive(true);
+            AudioManager.Play(AudioManager.Sounds.panelOpen);
             group.alpha = 0f;
             content.localScale = Vector3.one * 0.9f;
             Fade(1f);
@@ -53,6 +54,7 @@ namespace RpgPlayable
             while (picked == null) yield return null;
 
             hand.Hide();
+            AudioManager.Play(AudioManager.Sounds.panelClose);
             foreach (SkillCard card in cards)
             {
                 card.SetInteractable(false);

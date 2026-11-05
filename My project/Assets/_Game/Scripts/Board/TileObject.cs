@@ -52,6 +52,7 @@ namespace RpgPlayable
 
             if (kind == Kind.Pickup)
             {
+                AudioManager.Play(AudioManager.Sounds.pickup);
                 Sequence seq = DOTween.Sequence();
                 seq.Append(transform.DOMoveY(transform.position.y + 0.8f, 0.2f).SetEase(Ease.OutQuad));
                 seq.Join(transform.DOScale(transform.localScale * 1.25f, 0.2f));

@@ -31,3 +31,5 @@ MonoBehaviour:
   castFx: {fileID: 0}
   hitFx: {fileID: 0}
   effectFx: {fileID: 3364487434478392510, guid: 1c1067e1b7d427b4ab5ef7f29beb61c1, type: 3}
+  hitSound: {fileID: 0}
+  effectSound: {fileID: 0}

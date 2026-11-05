@@ -29,6 +29,7 @@ namespace RpgPlayable
         {
             transform.SetAsLastSibling();
             root.SetActive(true);
+            AudioManager.Play(AudioManager.Sounds.panelOpen);
 
             group.alpha = 0f;
             DOTween.To(() => group.alpha, a => group.alpha = a, 1f, 0.25f);

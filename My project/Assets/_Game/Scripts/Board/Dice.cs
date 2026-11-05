@@ -60,6 +60,7 @@ namespace RpgPlayable
             waitingForTap = false;
 
             if (onTapped != null) onTapped();
+            AudioManager.Play(AudioManager.Sounds.diceTap);
             yield return Roll(result);
         }
 
@@ -77,6 +78,8 @@ namespace RpgPlayable
             seq.Append(visual.DOLocalMoveY(restPosition.y + jumpHeight * 0.12f, rollDuration * 0.08f).SetEase(Ease.OutQuad));
             seq.Append(visual.DOLocalMoveY(restPosition.y, rollDuration * 0.07f).SetEase(Ease.InQuad));
             seq.Append(visual.DOPunchScale(Vector3.one * 0.12f, 0.25f, 6, 0.5f));
+            seq.InsertCallback(rollDuration * 0.85f, () => AudioManager.Play(AudioManager.Sounds.diceResult));
+            AudioManager.Play(AudioManager.Sounds.diceRoll);
 
             yield return TweenWait.For(seq);
             yield return new WaitForSeconds(0.2f);

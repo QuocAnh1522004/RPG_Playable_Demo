@@ -45,6 +45,7 @@ namespace RpgPlayable
                     transform.DORotateQuaternion(Quaternion.LookRotation(dir), turnDuration);
 
                 Tween hop = transform.DOJump(to, hopHeight, 1, hopDuration).SetEase(Ease.Linear);
+                AudioManager.PlayRandom(AudioManager.Sounds.footsteps, 0.6f);
 
                 // tiles we only pass through get cleared halfway into the hop, the stop tile keeps its monster
                 if (next != targetTile)

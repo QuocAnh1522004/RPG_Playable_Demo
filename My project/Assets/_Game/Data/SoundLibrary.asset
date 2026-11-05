@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: acdc21d7e0da09b46b451c4c232dc809, type: 3}
+  m_Name: SoundLibrary
+  m_EditorClassIdentifier: 
+  music: {fileID: 8300000, guid: 009ff32304f7b8843875aa37ca9aba8b, type: 3}
+  diceTap: {fileID: 8300000, guid: 3466632e0eb367849a532bb4c4439f28, type: 3}
+  diceRoll: {fileID: 8300000, guid: 693f7b1c1b97fd244b9fc9f10ec8e94f, type: 3}
+  diceResult: {fileID: 8300000, guid: 8141cb240a3ef9947886eeaa1f611b19, type: 3}
+  panelOpen: {fileID: 8300000, guid: 45bc9d2b90fe10443b84b3c4aba12601, type: 3}
+  panelClose: {fileID: 8300000, guid: 7436965268eafff40a3097b0c0d64889, type: 3}
+  pickup: {fileID: 8300000, guid: 7436965268eafff40a3097b0c0d64889, type: 3}
+  footsteps:
+  - {fileID: 8300000, guid: 0479ea84f8e259547aa3d4506ed65d56, type: 3}
+  - {fileID: 8300000, guid: 1fe70be10cc7dbb4e85fd40f8dfea3eb, type: 3}
+  - {fileID: 8300000, guid: 1738a447ec7b8644e8e32a2552de3208, type: 3}
+  - {fileID: 8300000, guid: 4cb26805848b3c041acc0fae200fe716, type: 3}
+  heroDash: {fileID: 8300000, guid: 4cde4aac947ac194ab154ab32ee28ea5, type: 3}
+  heroJumpBack: {fileID: 8300000, guid: d3810c47bca3cc648afbcc940249bbb4, type: 3}
+  heroSwing:
+  - {fileID: 8300000, guid: 3cbb49560aab0564ab97a4f503892a3f, type: 3}
+  - {fileID: 8300000, guid: e29ed3a689bd7bb46a7db20f52ce1177, type: 3}
+  - {fileID: 8300000, guid: 13552ccac0efb37499010b1762a88877, type: 3}
+  - {fileID: 8300000, guid: e2d91f4547d38b342bf7233cd78fe57a, type: 3}
+  heroHurt:
+  - {fileID: 8300000, guid: 191998be2fa3dad4cbf1a06d7a60e364, type: 3}
+  - {fileID: 8300000, guid: 846ffa289cb3d8b4c89f336bfdbac333, type: 3}
+  - {fileID: 8300000, guid: b791f9f18347c5a449ea7955f224cee1, type: 3}
+  monsters:
+  - monsterName: SLIME
+    dash: {fileID: 8300000, guid: c268d20e37e3e3944b2bfdca6f751a7a, type: 3}
+    attack: {fileID: 8300000, guid: 5d8e8fb8e779dac4eb8a4c797123c0b2, type: 3}
+    attackHit: {fileID: 8300000, guid: 75a30a8fd93fe8743b4996cd001469d0, type: 3}
+    hurt: {fileID: 8300000, guid: 36fd2953f72616a478ef8757cdfb19a5, type: 3}
+    die: {fileID: 8300000, guid: 5b67f13c1c4f0e84695986d8cb576a75, type: 3}
+  - monsterName: TROLL
+    dash: {fileID: 8300000, guid: 054138a4819fef14c86b099cb33be5c2, type: 3}
+    attack: {fileID: 8300000, guid: ee8dde6b36299104e93abc0e04da3609, type: 3}
+    attackHit: {fileID: 8300000, guid: cb88029639d87b4429475dabb7b241df, type: 3}
+    hurt: {fileID: 8300000, guid: 2eb9cbca1f7b71b4bb7b605e945d99da, type: 3}
+    die: {fileID: 8300000, guid: fea6308cb9922b047bc987824c128de5, type: 3}
+  - monsterName: TREANT
+    dash: {fileID: 8300000, guid: 1672dc6a7c16ae94994d260999917eea, type: 3}
+    attack: {fileID: 8300000, guid: d75828d7278ea5f44ba5eaa76009d5da, type: 3}
+    attackHit: {fileID: 8300000, guid: 5fa4d6364634d034bb19a22a233ccbc3, type: 3}
+    hurt: {fileID: 8300000, guid: ea25592b5a2ba6f4196a4bc93fcc8402, type: 3}
+    die: {fileID: 8300000, guid: f25dc90ac1161524cb0d752bbe7072f5, type: 3}

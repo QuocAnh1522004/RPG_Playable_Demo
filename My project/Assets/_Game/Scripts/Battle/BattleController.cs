@@ -55,6 +55,7 @@ namespace RpgPlayable
         ActorAnimator monster;
         Transform monsterTf;
         StageConfig stage;
+        MonsterSounds monsterSounds;
         int monsterHp;
 
         void Awake()
@@ -88,6 +89,7 @@ namespace RpgPlayable
             }
 
             monster.Play(ActorAnimator.Die);
+            AudioManager.Play(monsterSounds.die);
             yield return new WaitForSeconds(1.2f);
             Exit();
         }
@@ -95,6 +97,7 @@ namespace RpgPlayable
         void Enter(StageConfig stage, IList<SkillData> owned)
         {
             this.stage = stage;
+            monsterSounds = AudioManager.Sounds.ForMonster(stage.monsterName) ?? new MonsterSounds();
             boardCamera.enabled = false;
             battleCamera.enabled = true;
             ui.SetActive(true);
@@ -216,11 +219,13 @@ namespace RpgPlayable
             Vector3 front = monsterTf.position + (home - monsterTf.position).normalized * meleeDistance;
 
             hero.Play(ActorAnimator.Dash);
+            AudioManager.Play(AudioManager.Sounds.heroDash, 0.7f);
             yield return TweenWait.For(heroTf.DOMove(front, 0.2f).SetEase(Ease.OutQuad));
 
             foreach (Hit hit in action.hits)
             {
                 hero.Play(ActorAnimator.Attack);
+                AudioManager.PlayRandom(AudioManager.Sounds.heroSwing);
                 yield return new WaitForSeconds(0.25f);
                 FxSpawner.Spawn(action.skill.castFx, MonsterChest(), heroTf.rotation, 1f, fxScale);
                 ApplyHit(hit);
@@ -228,6 +233,7 @@ namespace RpgPlayable
             }
 
             hero.Play(ActorAnimator.JumpBack);
+            AudioManager.Play(AudioManager.Sounds.heroJumpBack);
             yield return TweenWait.For(heroTf.DOMove(home, 0.3f).SetEase(Ease.OutQuad));
             hero.Play(ActorAnimator.IdleCombat);
         }
@@ -269,11 +275,13 @@ namespace RpgPlayable
         void ApplyHit(Hit hit)
         {
             FxSpawner.Spawn(hit.source.hitFx, MonsterChest(), Quaternion.identity, 1.5f, fxScale);
+            AudioManager.Play(hit.source.hitSound);
             DamageMonster(hit.damage, hit.crit ? DamageStyle.Crit : DamageStyle.Normal);
 
             if (hit.proc != null)
             {
                 FxSpawner.Spawn(hit.proc.source.effectFx, MonsterChest(), Quaternion.identity, 1.5f, fxScale);
+                AudioManager.Play(hit.proc.source.effectSound);
                 DamageMonster(hit.proc.damage, StyleFor(hit.proc.effect));
             }
         }
@@ -285,7 +293,11 @@ namespace RpgPlayable
             monsterHp = Mathf.Max(0, monsterHp - amount);
             monsterBar.Set(monsterHp, stage.monsterMaxHp, false);
             popups.Show(amount, style, MonsterChest() + Vector3.up);
-            if (monsterHp > 0) monster.Play(ActorAnimator.Hit);
+            if (monsterHp > 0)
+            {
+                monster.Play(ActorAnimator.Hit);
+                AudioManager.Play(monsterSounds.hurt, 0.6f);
+            }
         }
 
         static DamageStyle StyleFor(StatusEffect effect)
@@ -307,6 +319,8 @@ namespace RpgPlayable
             if (stage.ranged)
             {
                 monster.Play(ActorAnimator.Attack);
+                AudioManager.Play(monsterSounds.dash);
+                AudioManager.Play(monsterSounds.attack);
                 yield return new WaitForSeconds(0.35f);
 
                 GameObject p = FxSpawner.Spawn(stage.battleProjectile, MonsterChest(), Quaternion.identity, 0f, 1f);
@@ -324,8 +338,10 @@ namespace RpgPlayable
                 Vector3 front = hero.transform.position + (home - hero.transform.position).normalized * meleeDistance;
 
                 monster.Play(ActorAnimator.Dash);
+                AudioManager.Play(monsterSounds.dash, 0.7f);
                 yield return TweenWait.For(monsterTf.DOMove(front, 0.2f).SetEase(Ease.OutQuad));
                 monster.Play(ActorAnimator.Attack);
+                AudioManager.Play(monsterSounds.attack);
                 yield return new WaitForSeconds(0.3f);
                 HitHero(damage);
                 yield return new WaitForSeconds(0.3f);
@@ -337,6 +353,8 @@ namespace RpgPlayable
         void HitHero(int damage)
         {
             FxSpawner.Spawn(stage.monsterHitFx, HeroChest(), Quaternion.identity, 1.5f, fxScale);
+            AudioManager.Play(monsterSounds.attackHit);
+            AudioManager.PlayRandom(AudioManager.Sounds.heroHurt, 0.8f);
             heroStats.TakeDamage(damage);
             heroBar.Set(heroStats.Hp, heroStats.MaxHp, false);
             popups.Show(damage, DamageStyle.Normal, HeroChest() + Vector3.up);

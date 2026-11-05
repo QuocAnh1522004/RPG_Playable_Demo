@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4846d22d1d675fb4f9ba52ca30f25809, type: 3}
+  m_Name: Skill_basic_attack
+  m_EditorClassIdentifier: 
+  id: basic_attack
+  displayName: Basic Attack
+  description: Attack with equipped weapon every round.
+  icon: {fileID: 0}
+  selectable: 0
+  kind: 0
+  trigger: 3
+  roundInterval: 1
+  projectileCount: 1
+  priority: 4
+  effect: 0
+  effectChance: 0
+  stat: 0
+  statBonusPercent: 0
+  castFx: {fileID: 4325982516364399481, guid: 662b592baaebc9848b50db139929f34d, type: 3}
+  hitFx: {fileID: 4259414343605789720, guid: f29a17d8a53fbf14aabb4147264f178b, type: 3}
+  effectFx: {fileID: 0}

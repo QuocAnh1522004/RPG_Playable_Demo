@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4846d22d1d675fb4f9ba52ca30f25809, type: 3}
+  m_Name: Skill_basic_attack_poison
+  m_EditorClassIdentifier: 
+  id: basic_attack_poison
+  displayName: Basic Attack Poison
+  description: Basic ATK has a chance to inflict Poison.
+  icon: {fileID: 21300000, guid: a4ec408a215d8344d994be5779a89c55, type: 3}
+  selectable: 1
+  kind: 1
+  trigger: 0
+  roundInterval: 1
+  projectileCount: 1
+  priority: 100
+  effect: 2
+  effectChance: 0.5
+  stat: 0
+  statBonusPercent: 0
+  castFx: {fileID: 0}
+  hitFx: {fileID: 0}
+  effectFx: {fileID: 3364487434478392510, guid: 1c1067e1b7d427b4ab5ef7f29beb61c1, type: 3}

@@ -84,7 +84,6 @@ namespace RpgPlayable
             SetStep(FlowStep.SkillPick);
 
             List<SkillData> options = skillLibrary.PickRandom(3, ownedSkills);
-            Debug.Log("[Flow] options: " + options.Count); // TEMP luna debug
             yield return skillPanel.ShowAndWaitForPick(options, onPicked);
 
             if (skillPanel.Picked != null)

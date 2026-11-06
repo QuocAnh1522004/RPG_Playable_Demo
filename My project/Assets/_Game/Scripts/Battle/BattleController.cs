@@ -92,6 +92,7 @@ namespace RpgPlayable
             AudioManager.Play(monsterSounds.die);
             yield return new WaitForSeconds(1.2f);
             Exit();
+            yield return null; // Luna, see TweenWait
         }
 
         void Enter(StageConfig stage, IList<SkillData> owned)
@@ -110,10 +111,10 @@ namespace RpgPlayable
 
             monster = m.GetComponent<ActorAnimator>();
             if (monster == null) monster = m.AddComponent<ActorAnimator>();
-            monster.Play(ActorAnimator.Idle, 0f);
+            monster.Play(ActorAnimator.Idle);
 
             hero.transform.localPosition = Vector3.zero;
-            hero.Play(ActorAnimator.IdleCombat, 0f);
+            hero.Play(ActorAnimator.IdleCombat);
 
             monsterHp = stage.monsterMaxHp;
             monsterBar.Follow(monsterTf, battleCamera);
@@ -236,6 +237,7 @@ namespace RpgPlayable
             AudioManager.Play(AudioManager.Sounds.heroJumpBack);
             yield return TweenWait.For(heroTf.DOMove(home, 0.3f).SetEase(Ease.OutQuad));
             hero.Play(ActorAnimator.IdleCombat);
+            yield return null; // Luna, see TweenWait
         }
 
         IEnumerator Projectiles(HeroAction action)
@@ -246,6 +248,7 @@ namespace RpgPlayable
                 yield return new WaitForSeconds(projectileStagger);
             }
             yield return new WaitForSeconds(projectileTime + 0.1f);
+            yield return null; // Luna, see TweenWait
         }
 
         IEnumerator Fly(SkillData skill, Hit hit, int index, int count)
@@ -348,6 +351,7 @@ namespace RpgPlayable
                 yield return TweenWait.For(monsterTf.DOMove(home, 0.25f).SetEase(Ease.OutQuad));
                 monster.Play(ActorAnimator.Idle);
             }
+            yield return null; // Luna, see TweenWait
         }
 
         void HitHero(int damage)

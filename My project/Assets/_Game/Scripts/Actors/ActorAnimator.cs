@@ -14,22 +14,17 @@ namespace RpgPlayable
         public const string Die = "Die";
 
         [SerializeField] Animator animator;
-        [SerializeField] float defaultFade = 0.1f;
 
         void Awake()
         {
             if (animator == null) animator = GetComponentInChildren<Animator>();
         }
 
+        // plain Play: Luna doesn't support CrossFadeInFixedTime (it silently does nothing in the build)
         public void Play(string state)
         {
-            Play(state, defaultFade);
-        }
-
-        public void Play(string state, float fade)
-        {
             if (animator == null) return;
-            animator.CrossFadeInFixedTime(state, fade);
+            animator.Play(state, 0, 0f);
         }
     }
 }

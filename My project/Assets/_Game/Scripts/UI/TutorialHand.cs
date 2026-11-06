@@ -22,11 +22,12 @@ namespace RpgPlayable
             hand.gameObject.SetActive(false);
         }
 
-        public void PointAt(Vector2 screenPos)
+        // anchor = 0..1 over the screen (see UiAnchor), for things in the 3D world like the dice
+        public void PointAt(Vector2 anchor)
         {
             Stop();
             Show();
-            hand.position = screenPos;
+            UiAnchor.Place(hand, anchor, Vector2.zero);
             PlayTap();
         }
 
@@ -36,6 +37,7 @@ namespace RpgPlayable
             Stop();
             if (targets.Count == 0) return;
             Show();
+            UiAnchor.Place(hand, new Vector2(0.5f, 0.5f), Vector2.zero); // UI targets use world positions, reset the anchor
             sweep = StartCoroutine(SweepRoutine(targets, onTarget));
         }
 

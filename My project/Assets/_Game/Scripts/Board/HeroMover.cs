@@ -59,6 +59,7 @@ namespace RpgPlayable
             }
 
             if (anim != null) anim.Play(ActorAnimator.Idle);
+            yield return null; // Luna, see TweenWait
         }
     }
 }

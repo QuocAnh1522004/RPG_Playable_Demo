@@ -1,6 +1,7 @@
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace RpgPlayable.EditorTools
 {
@@ -61,6 +62,75 @@ namespace RpgPlayable.EditorTools
                     Debug.Log("Dice faces set up automatically and scene saved");
                 }
             };
+        }
+
+        // scenes from before the tap button existed get one on the next recompile
+        [InitializeOnLoadMethod]
+        static void BuildTapAreaIfMissing()
+        {
+            EditorApplication.delayCall += () =>
+            {
+                if (EditorApplication.isPlayingOrWillChangePlaymode) return;
+
+                Dice dice = Object.FindFirstObjectByType<Dice>();
+                if (dice == null) return;
+                var so = new SerializedObject(dice);
+                if (so.FindProperty("tapButton").objectReferenceValue != null) return;
+
+                if (BuildTapArea(dice))
+                {
+                    EditorSceneManager.SaveScene(dice.gameObject.scene);
+                    Debug.Log("Built DiceTapArea and saved the scene");
+                }
+            };
+        }
+
+        [MenuItem("RPG Playable/Build Dice Tap Area")]
+        static void BuildTapAreaMenu()
+        {
+            Dice dice = Object.FindFirstObjectByType<Dice>();
+            if (dice != null && BuildTapArea(dice))
+                EditorSceneManager.MarkSceneDirty(dice.gameObject.scene);
+        }
+
+        // Same recipe as the PLAY NOW button that works in the Luna build: a scene object with a sprite,
+        // nearly (not fully) transparent so nothing can cull it out of the raycast.
+        static bool BuildTapArea(Dice dice)
+        {
+            Canvas canvas = Object.FindFirstObjectByType<Canvas>();
+            if (canvas == null)
+            {
+                Debug.LogError("No Canvas in the scene");
+                return false;
+            }
+
+            Transform old = canvas.transform.Find("DiceTapArea");
+            if (old != null) Undo.DestroyObjectImmediate(old.gameObject);
+
+            var go = new GameObject("DiceTapArea", typeof(RectTransform));
+            go.layer = LayerMask.NameToLayer("UI");
+            var rt = (RectTransform)go.transform;
+            rt.SetParent(canvas.transform, false);
+            rt.sizeDelta = new Vector2(320f, 320f);
+
+            // above the HUD, below the skill panel, hand and AFK overlay
+            Transform topBar = canvas.transform.Find("TopBar");
+            rt.SetSiblingIndex(topBar != null ? topBar.GetSiblingIndex() + 1 : 0);
+
+            var img = go.AddComponent<Image>();
+            img.sprite = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/PLA_TEST/Art/UI/Shared/UnitSquare.png");
+            img.color = new Color(1f, 1f, 1f, 0.01f);
+
+            var button = go.AddComponent<Button>();
+            button.targetGraphic = img;
+            button.transition = Selectable.Transition.None;
+
+            var so = new SerializedObject(dice);
+            so.FindProperty("tapButton").objectReferenceValue = button;
+            so.ApplyModifiedProperties();
+
+            Undo.RegisterCreatedObjectUndo(go, "Build Dice Tap Area");
+            return true;
         }
 
         [MenuItem("RPG Playable/Auto Setup Dice Faces")]

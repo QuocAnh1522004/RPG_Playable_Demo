@@ -63,6 +63,7 @@ namespace RpgPlayable
             // last pick goes straight to the store, opened inside the tap so it counts as a user gesture
             yield return PickSkill(OpenStoreOnPick);//stage 10
             SetStep(FlowStep.Ending);
+            yield return null; // Luna, see TweenWait
         }
 
         void OpenStoreOnPick()
@@ -83,6 +84,7 @@ namespace RpgPlayable
             SetStep(FlowStep.SkillPick);
 
             List<SkillData> options = skillLibrary.PickRandom(3, ownedSkills);
+            Debug.Log("[Flow] options: " + options.Count); // TEMP luna debug
             yield return skillPanel.ShowAndWaitForPick(options, onPicked);
 
             if (skillPanel.Picked != null)
@@ -95,19 +97,22 @@ namespace RpgPlayable
             // power-up burst on the hero, the next step (hand on the dice) starts while it plays
             FxSpawner.Spawn(upgradeFx, heroMover.transform.position, Quaternion.identity, 3f, 1f);
             AudioManager.Play(AudioManager.Sounds.upgrade, 0.7f);
+            yield return null; // Luna, see TweenWait
         }
 
         IEnumerator RollDice(int result)
         {
             SetStep(FlowStep.DiceRoll);
-            tutorialHand.PointAt(dice.ScreenPosition);
+            tutorialHand.PointAt(dice.AnchorPosition);
             yield return dice.WaitForTapAndRoll(result, tutorialHand.Hide);
+            yield return null; // Luna, see TweenWait
         }
 
         IEnumerator MoveHero(int targetTile)
         {
             SetStep(FlowStep.Moving);
             yield return heroMover.MoveTo(targetTile);
+            yield return null; // Luna, see TweenWait
         }
 
         IEnumerator Battle(StageConfig stage)
@@ -115,6 +120,7 @@ namespace RpgPlayable
             SetStep(FlowStep.Battle);
             yield return battle.Run(stage, ownedSkills);
             heroMover.ClearCurrentTile(); // the beaten monster shrinks away on the board
+            yield return null; // Luna, see TweenWait
         }
 
         void OnValidate()

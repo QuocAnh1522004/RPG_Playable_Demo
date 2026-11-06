@@ -54,10 +54,12 @@ namespace RpgPlayable
             Fade(1f);
             content.DOScale(1f, 0.3f).SetEase(Ease.OutBack);
 
+            Debug.Log("[Panel] shown, cards: " + handTargets.Count); // TEMP luna debug
             for (int i = 0; i < handTargets.Count; i++)
                 cards[i].PlayIntro(0.1f + i * cardStagger);
             yield return new WaitForSeconds(0.45f + handTargets.Count * cardStagger);
 
+            Debug.Log("[Panel] after intro, alpha " + group.alpha + " scale " + content.localScale.x + " tweens " + DOTween.TotalPlayingTweens()); // TEMP luna debug
             hand.PointAtEach(handTargets, HighlightIndex);
 
             while (picked == null) yield return null;
@@ -74,6 +76,7 @@ namespace RpgPlayable
             yield return TweenWait.For(picked.Rect.DOPunchScale(Vector3.one * 0.06f, 0.25f, 6, 0.5f));
             yield return TweenWait.For(Fade(0f));
             root.SetActive(false);
+            yield return null; // Luna, see TweenWait
         }
 
         void OnCardClicked(SkillCard card)

@@ -42,10 +42,13 @@ namespace RpgPlayable
         {
             if (target == null || cam == null) return;
 
-            float uiScale = transform.lossyScale.y;
-            Vector3 pos = cam.WorldToScreenPoint(target.position + Vector3.up * headHeight);
-            pos.y = Mathf.Min(pos.y + padding * uiScale, Screen.height - topLimit * uiScale);
-            transform.position = pos;
+            var rt = (RectTransform)transform;
+            float parentHeight = ((RectTransform)rt.parent).rect.height;
+            Vector2 anchor = UiAnchor.FromWorld(cam, target.position + Vector3.up * headHeight);
+
+            // keep clear of the top bar: highest allowed y measured from the anchor
+            float maxOffset = (parentHeight - topLimit) - anchor.y * parentHeight;
+            UiAnchor.Place(rt, anchor, new Vector2(0f, Mathf.Min(padding, maxOffset)));
         }
 
         // top of the model above its pivot, so the bar fits any model or scale

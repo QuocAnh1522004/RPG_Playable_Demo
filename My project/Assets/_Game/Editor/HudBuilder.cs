@@ -25,11 +25,27 @@ namespace RpgPlayable.EditorTools
                 Canvas canvas = Object.FindFirstObjectByType<Canvas>();
                 if (canvas == null) return;
                 Transform play = canvas.transform.Find("TopBar/TopRight/PlayNow");
-                if (play == null || play.GetComponent<PulseScale>() != null) return;
+                if (play == null) return;
 
-                play.gameObject.AddComponent<PulseScale>();
+                bool changed = false;
+                if (play.GetComponent<PulseScale>() == null)
+                {
+                    play.gameObject.AddComponent<PulseScale>();
+                    changed = true;
+                }
+
+                // btn_yellow's slice borders (318px) are wider than this button, Luna then draws nothing
+                var img = play.GetComponent<Image>();
+                if (img != null && img.type == Image.Type.Sliced)
+                {
+                    img.type = Image.Type.Simple;
+                    ((RectTransform)play).sizeDelta = new Vector2(290f, 99f); // sprite is 413x141
+                    changed = true;
+                }
+
+                if (!changed) return;
                 EditorSceneManager.SaveScene(play.gameObject.scene);
-                Debug.Log("Added PulseScale to the top-right PLAY NOW and saved the scene");
+                Debug.Log("Fixed the top-right PLAY NOW (pulse / simple image) and saved the scene");
             };
         }
 
@@ -163,7 +179,8 @@ namespace RpgPlayable.EditorTools
             logo.rectTransform.sizeDelta = new Vector2(300f, 140f);
             logo.rectTransform.anchoredPosition = new Vector2(-10f, 40f);
 
-            Button play = NewPlayButton("PlayNow", corner, new Vector2(290f, 80f), new Vector2(-10f, -55f), 42f, font, thick);
+            Button play = NewPlayButton("PlayNow", corner, new Vector2(290f, 99f), new Vector2(-10f, -55f), 42f, font, thick);
+            play.GetComponent<Image>().type = Image.Type.Simple; // sliced borders are wider than the button, Luna draws nothing
             play.gameObject.AddComponent<PulseScale>();
             return play;
         }

@@ -31,6 +31,7 @@ namespace RpgPlayable
 
             banner.gameObject.SetActive(false);
             banner.anchoredPosition = pos;
+            yield return null; // Luna, see TweenWait
         }
     }
 }

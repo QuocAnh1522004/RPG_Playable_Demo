@@ -29,17 +29,16 @@ namespace RpgPlayable
             Material mat = styleMaterials[(int)style];
             if (mat != null) t.fontSharedMaterial = mat;
 
-            float uiScale = transform.lossyScale.x;
             RectTransform rt = t.rectTransform;
-            Vector3 screen = worldCamera.WorldToScreenPoint(worldPos);
-            rt.position = screen + new Vector3(Random.Range(-scatter, scatter), Random.Range(-10f, 10f), 0f) * uiScale;
+            var start = new Vector2(Random.Range(-scatter, scatter), Random.Range(-10f, 10f));
+            UiAnchor.Place(rt, UiAnchor.FromWorld(worldCamera, worldPos), start);
 
             float size = style == DamageStyle.Crit ? 1.4f : 1f;
             rt.localScale = Vector3.one * size * 0.5f;
 
             Sequence seq = DOTween.Sequence();
             seq.Append(rt.DOScale(size, 0.15f).SetEase(Ease.OutBack));
-            seq.Join(rt.DOMoveY(rt.position.y + rise * uiScale, duration).SetEase(Ease.OutCubic));
+            seq.Join(rt.DOAnchorPosY(start.y + rise, duration).SetEase(Ease.OutCubic));
             seq.Insert(duration * 0.6f, DOTween.To(() => t.alpha, a => t.alpha = a, 0f, duration * 0.4f));
             seq.OnComplete(() => Destroy(t.gameObject));
         }
